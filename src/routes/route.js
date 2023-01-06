@@ -1,8 +1,8 @@
 
 const express = require("express")
 const router = express.Router()
-let {apodImage} = require("../controllers/apodController")
+let {getApodImage} = require("../controllers/apodController")
 
-router.post("/apod-image",apodImage)
+router.get("/apod-image",getApodImage)
 
 module.exports = router

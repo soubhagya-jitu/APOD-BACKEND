@@ -1,9 +1,8 @@
 let axios = require("axios")
 let apodModel = require("../models/apodModel")
 
-let apodImage = async function (req, res) {
+let getApodImage = async function (req, res) {
     try {
-        res.setHeader('Access-Control-Allow-Origin','*')
         let date = req.body.date
         if (!date) {
             function convertTZ(date, tzString) {
@@ -46,4 +45,4 @@ let apodImage = async function (req, res) {
     }
 }
 
-module.exports = { apodImage }
+module.exports = { getApodImage }
