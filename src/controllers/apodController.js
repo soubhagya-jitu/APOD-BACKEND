@@ -4,20 +4,32 @@ let apodModel = require("../models/apodModel")
 let getApodImage = async function (req, res) {
     try {
         let date = req.body.date
-        if (!date) {
-            function convertTZ(date, tzString) {
-                return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tzString}));   
-            }
-            date=new Date()
-            date = convertTZ(date, "America/New_York")
-            var year = date.toLocaleString("default", { year: "numeric" });
-            var month = date.toLocaleString("default", { month: "2-digit" });
-            var day = date.toLocaleString("default", { day: "2-digit" });
-            date = year + "-" + month + "-" + day
+
+        function convertTZ(date, tzString) {
+            return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", { timeZone: tzString }));
         }
+        function dateConversion(day1) {
+            var year = day1.toLocaleString("default", { year: "numeric" });
+            var month = day1.toLocaleString("default", { month: "2-digit" });
+            var day = day1.toLocaleString("default", { day: "2-digit" });
+            day1 = year + "-" + month + "-" + day
+            return day1
+        }
+
+        let indianDate = new Date()
+        let indianTime =indianDate
+        indianDate = dateConversion(indianDate)
+
+            if (date == indianDate || !date) {
+            let americanDate = convertTZ(indianTime, "America/New_York")
+            let validDate = dateConversion(americanDate)
+            date = validDate
+        }
+
+
         if (date) {
             if (!(/^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/.test(date))) {
-                return res.status(400).send({ status: false, message: "Enter a valid date in this format yyyy-mm-dd" })
+                return res.status(400).send({ status: false, message: "Enter a valid date in this format YYYY-MM-DD" })
             }
         }
         let findImage = await apodModel.findOne({ date: date }).select({ copyright: 1, date: 1, explanation: 1, hdurl: 1, media_type: 1, service_version: 1, title: 1, url: 1, _id: 0 })
